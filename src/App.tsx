@@ -1,3 +1,5 @@
+import Header from "./components/Header";
+
 export default function App() {
   return (
     <div className="min-h-screen flex justify-center items-center p-6">
@@ -6,7 +8,7 @@ export default function App() {
         {/* The Glow */}
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div>
         <div>
-          <div>Header</div>
+          <Header />
           <div>Stats</div>
           <div>Task Input</div>
           <div>Tasks Container</div>
