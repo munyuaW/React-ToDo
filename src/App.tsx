@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import Stats from "./components/Stats";
 
 export default function App() {
   return (
@@ -9,7 +10,7 @@ export default function App() {
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div>
         <div>
           <Header />
-          <div>Stats</div>
+          <Stats />
           <div>Task Input</div>
           <div>Tasks Container</div>
         </div>
