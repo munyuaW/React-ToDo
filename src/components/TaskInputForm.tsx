@@ -1,7 +1,7 @@
-function TaskInputForm(props) {
+function TaskInputForm({ addTask }: { addTask: (formData: FormData) => void }) {
   return (
     <div className="mb-6">
-      <form action={props.addTask}>
+      <form action={addTask}>
         <div className="flex gap-2 flex-wrap">
           <input
             type="text"
