@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@plugin '@tailwindcss/forms';
+
 @theme {
     --font-Raleway: Raleway, sans-serif;
     --font-Inter: Inter, sans-serif
