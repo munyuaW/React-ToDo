@@ -10,3 +10,9 @@ export interface TodoItemProps {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 }
+
+export interface StatsProps {
+  total: number;
+  completed: number;
+  percentage: number;
+}
