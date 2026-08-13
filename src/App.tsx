@@ -1,21 +1,44 @@
+import { useState } from "react";
+
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Stats from "./components/Stats";
 import TaskInputForm from "./components/TaskInputForm";
 import TodoItem from "./components/TodoItem";
 import { defaultTasks } from "./data";
+import type { Todo } from "./types";
 
 export default function App() {
+  const [tasks, setTasks] = useState<Todo[]>(defaultTasks);
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((task) => task.completed).length;
+  const percentComplete =
+    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
   function addNewTask(formData: FormData) {
     const input = formData.get("task");
-    console.log(input);
+    if (typeof input !== "string" || !input.trim()) return;
+
+    const newTask: Todo = {
+      id: crypto.randomUUID(),
+      text: input.trim(),
+      completed: false,
+    };
+
+    setTasks((prev) => [...prev, newTask]);
   }
 
-  function toggleChecked() {}
+  function toggleChecked(id: Todo["id"]) {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task,
+      ),
+    );
+  }
   function editTask() {}
   function deleteTask() {}
 
-  const todoItems = defaultTasks.map((todo) => (
+  const todoItems = tasks.map((todo) => (
     <TodoItem
       key={todo.id}
       todo={todo}
@@ -33,7 +56,11 @@ export default function App() {
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div>
         <div>
           <Header />
-          <Stats />
+          <Stats
+            total={totalTasks}
+            completed={completedTasks}
+            percentage={percentComplete}
+          />
           <TaskInputForm addTask={addNewTask} />
           <div className="space-y-2">{todoItems}</div>
         </div>
