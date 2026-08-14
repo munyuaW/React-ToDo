@@ -14,10 +14,14 @@ function TodoItem(props: TodoItemProps) {
         className={`flex-1 ${props.todo.completed ? "line-through text-slate-400" : ""}`}>
         {props.todo.text}
       </span>
-      <button className="p-1 rounded-sm cursor-pointer -mr-2">
+      <button
+        onClick={() => props.onEdit(props.todo.id)}
+        className="p-1 rounded-sm cursor-pointer -mr-2">
         <FaRegEdit className="size-4 text-emerald-400" />
       </button>
-      <button className="p-1 rounded-sm cursor-pointer -mr-2">
+      <button
+        onClick={() => props.onDelete(props.todo.id)}
+        className="p-1 rounded-sm cursor-pointer -mr-2">
         <FaTrashAlt className="size-4 text-orange-700" />
       </button>
     </div>
