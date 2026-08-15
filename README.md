@@ -7,6 +7,7 @@ This is a simple TODO app built with React, TypeScript, Vite, and Tailwind CSS.
 - Add new TODO items
 - Mark TODO items as complete
 - Delete TODO items
+- Local storage persistence
 - Responsive design
 
 ## Getting Started
