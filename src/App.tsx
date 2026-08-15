@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Stats from "./components/Stats";
 import TaskInputForm from "./components/TaskInputForm";
 import TodoItem from "./components/TodoItem";
-import { defaultTasks } from "./data";
+// import { defaultTasks } from "./data";
 import type { Todo } from "./types";
 import Modal from "./components/Modal";
 
 export default function App() {
-  const [tasks, setTasks] = useState<Todo[]>(defaultTasks);
+  const [tasks, setTasks] = useState<Todo[]>(loadFromLocalStorage);
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((task) => task.completed).length;
   const percentComplete =
@@ -22,6 +22,11 @@ export default function App() {
   const [editText, setEditText] = useState("");
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
   const [deleteId, setDeleteId] = useState("");
+
+  // Save to localStorage when tasks change
+  useEffect(() => {
+    saveToLocalStorage(tasks);
+  }, [tasks]);
 
   function addNewTask(formData: FormData) {
     const input = formData.get("task");
@@ -79,6 +84,21 @@ export default function App() {
   function closeModal() {
     setShowModal(false);
     setIsEdit(false);
+  }
+
+  function saveToLocalStorage(tasks: Todo[]) {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+  function loadFromLocalStorage() {
+    const savedTasks = localStorage.getItem("tasks");
+    if (!savedTasks) return [];
+    try {
+      return JSON.parse(savedTasks) as Todo[];
+    } catch (error) {
+      console.error("Failed to parse tasks from localStorage", error);
+      return [];
+    }
   }
 
   const todoItems = tasks.map((todo, index) => (
