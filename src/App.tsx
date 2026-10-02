@@ -42,8 +42,8 @@ export default function App() {
   }
 
   function toggleChecked(id: string) {
-    setTasks(
-      tasks.map((task) =>
+    setTasks((prev) =>
+      prev.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task,
       ),
     );
