@@ -20,7 +20,7 @@ export default function App() {
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editText, setEditText] = useState("");
-  const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
+  const [editTaskId, setEditTaskId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState("");
 
   // Save to localStorage when tasks change
@@ -49,26 +49,38 @@ export default function App() {
     );
   }
 
-  function showEditModal(index: number) {
-    setShowModal(true);
+  function openEditModal(taskId: string) {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+
+    setEditTaskId(taskId);
+    setEditText(task.text);
     setIsEdit(true);
+    setShowModal(true);
 
-    editTask(index);
+    // editTask(index);
   }
 
-  function editTask(index: number) {
-    const taskToEdit = tasks[index];
-    setEditIndex(index);
-    setEditText(taskToEdit.text);
-  }
+  // function editTask(index: number) {
+  //   const taskToEdit = tasks[index];
+  //   setEditIndex(index);
+  //   setEditText(taskToEdit.text);
+  // }
 
   function saveEdit() {
-    if (editIndex === undefined) return;
-    const updatedTasks = [...tasks];
-    updatedTasks[editIndex].text = editText;
-    setTasks(updatedTasks);
+    if (!editTaskId) return;
+    const cleanText = editText.trim();
+
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === editTaskId ? { ...task, text: cleanText } : task,
+      ),
+    );
+
     setShowModal(false);
     setIsEdit(false);
+    setEditTaskId(null);
+    setEditText("");
   }
 
   function shoDeleteModal(id: string) {
@@ -101,12 +113,12 @@ export default function App() {
     }
   }
 
-  const todoItems = tasks.map((todo, index) => (
+  const todoItems = tasks.map((todo) => (
     <TodoItem
       key={todo.id}
       todo={todo}
       onToggle={toggleChecked}
-      onEdit={() => showEditModal(index)}
+      onEdit={openEditModal}
       onDelete={shoDeleteModal}
     />
   ));
@@ -134,7 +146,6 @@ export default function App() {
       {showModal && (
         <Modal
           isEdit={isEdit}
-          editIndex={editIndex}
           editText={editText}
           setEditText={setEditText}
           onSave={saveEdit}
