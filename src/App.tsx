@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { MdStorage } from "react-icons/md";
 
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -154,6 +155,14 @@ export default function App() {
             />
             <TaskInputForm onAdd={addNewTask} />
             <div className="space-y-2">{todoItems}</div>
+          </div>
+
+          {/* Card Footer */}
+          <div className="flex items-center gap-1 absolute bottom-0 pl-1 py-2">
+            <MdStorage className="text-xs text-green-400" />
+            <span className="text-[10px] text-slate-400">
+              Saved on this device
+            </span>
           </div>
         </div>
         <Footer />
