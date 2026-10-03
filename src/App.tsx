@@ -105,10 +105,23 @@ export default function App() {
   }
 
   function loadFromLocalStorage() {
-    const savedTasks = localStorage.getItem("tasks");
-    if (!savedTasks) return [];
+    // runtime env. check: for vite SPA window is always defined at runtime
+    if (typeof window === "undefined") return [];
     try {
-      return JSON.parse(savedTasks) as Todo[];
+      const savedTasks = localStorage.getItem("tasks");
+      if (!savedTasks) return [];
+
+      const parsed = JSON.parse(savedTasks);
+      if (Array.isArray(parsed)) return [];
+
+      return parsed.filter(
+        (item: Todo) =>
+          typeof item === "object" &&
+          item !== null &&
+          typeof item.id === "string" &&
+          typeof item.text === "string" &&
+          typeof item.completed === "boolean",
+      );
     } catch (error) {
       console.error("Failed to parse tasks from localStorage", error);
       return [];
