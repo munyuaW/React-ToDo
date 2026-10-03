@@ -18,12 +18,17 @@ function Button(props: ButtonProps) {
 function EditBox(props: EditBoxProps) {
   return (
     <div className="space-y-2.5 text-center">
+      <label
+        htmlFor="edit-task-input"
+        className="block text-sm font-semibold mb-2">
+        Edit task
+      </label>
       <input
         type="text"
         name=""
-        id=""
-        value={props.editText}
-        onChange={(e) => props.setEditText(e.target.value)}
+        id="edit-task-input"
+        value={props.editText ?? ""}
+        onChange={(e) => props.setEditText?.(e.target.value)}
         placeholder="Task to edit here"
         className="w-full border-slate-700 rounded-sm focus:outline-none focus:border-cyan-500 text-slate-800"
       />
