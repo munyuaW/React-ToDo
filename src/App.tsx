@@ -28,13 +28,13 @@ export default function App() {
     saveToLocalStorage(tasks);
   }, [tasks]);
 
-  function addNewTask(formData: FormData) {
-    const input = formData.get("task");
-    if (typeof input !== "string" || !input.trim()) return;
+  function addNewTask(text: string) {
+    const cleanedInput = text.trim();
+    if (!cleanedInput) return;
 
     const newTask: Todo = {
       id: crypto.randomUUID(),
-      text: input.trim(),
+      text: cleanedInput,
       completed: false,
     };
 
@@ -137,7 +137,7 @@ export default function App() {
               completed={completedTasks}
               percentage={percentComplete}
             />
-            <TaskInputForm addTask={addNewTask} />
+            <TaskInputForm onAdd={addNewTask} />
             <div className="space-y-2">{todoItems}</div>
           </div>
         </div>
