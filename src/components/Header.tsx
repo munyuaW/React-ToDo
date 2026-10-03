@@ -8,7 +8,9 @@ function Header() {
       </div>
       <div className="text">
         <h1 className="text-2xl font-bold">My Todo</h1>
-        <p className="text-sm text-slate-400">Stay Productive</p>
+        <p className="text-xs text-slate-400">
+          Be productive, one task at a time
+        </p>
       </div>
     </div>
   );
