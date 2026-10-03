@@ -6,11 +6,13 @@ export interface Todo {
   completed: boolean;
 }
 
+type TodoAction = (id: string) => void;
+
 export interface TodoItemProps {
   todo: Todo;
-  onToggle: (id: string) => void;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onToggle: TodoAction;
+  onEdit: TodoAction;
+  onDelete: TodoAction;
 }
 
 export interface StatsProps {
@@ -32,7 +34,7 @@ export interface ModalProps {
   editText?: string;
   setEditText?: (text: string) => void;
   onSave: () => void;
-  onConfirm: (id: string) => void;
+  onConfirm: TodoAction;
   deleteId?: string;
   onCancel: () => void;
 }
@@ -47,6 +49,6 @@ export interface EditBoxProps {
 
 export interface ConfirmDeleteBoxProps {
   deleteId: string | undefined;
-  confirmDelete: (id: string) => void;
+  confirmDelete: TodoAction;
   cancelDelete: () => void;
 }
