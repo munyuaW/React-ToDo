@@ -112,7 +112,7 @@ export default function App() {
       if (!savedTasks) return [];
 
       const parsed = JSON.parse(savedTasks);
-      if (Array.isArray(parsed)) return [];
+      if (!Array.isArray(parsed)) return [];
 
       return parsed.filter(
         (item: Todo) =>
