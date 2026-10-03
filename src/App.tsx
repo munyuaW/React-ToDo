@@ -69,7 +69,9 @@ export default function App() {
 
   function saveEdit() {
     if (!editTaskId) return;
+
     const cleanText = editText.trim();
+    if (!cleanText) return;
 
     setTasks((prev) =>
       prev.map((task) =>
