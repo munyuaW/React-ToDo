@@ -8,7 +8,13 @@ import TaskInputForm from "./components/TaskInputForm";
 import TodoItem from "./components/TodoItem";
 // import { defaultTasks } from "./data";
 import type { Todo } from "./types";
-import Modal from "./components/Modal";
+import DeleteModal from "./components/DeleteModal";
+import EditModal from "./components/EditModal";
+
+type ActiveModal =
+  | { type: "edit"; taskId: string; initialText: string }
+  | { type: "delete"; taskId: string }
+  | null;
 
 export default function App() {
   const [tasks, setTasks] = useState<Todo[]>(loadFromLocalStorage);
@@ -17,12 +23,7 @@ export default function App() {
   const percentComplete =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-  // Modal state
-  const [showModal, setShowModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [editText, setEditText] = useState("");
-  const [editTaskId, setEditTaskId] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState("");
+  const [activeModal, setActiveModal] = useState<ActiveModal>(null);
 
   // Save to localStorage when tasks change
   useEffect(() => {
@@ -54,51 +55,33 @@ export default function App() {
     const task = tasks.find((t) => t.id === taskId);
     if (!task) return;
 
-    setEditTaskId(taskId);
-    setEditText(task.text);
-    setIsEdit(true);
-    setShowModal(true);
-
-    // editTask(index);
+    setActiveModal({ type: "edit", taskId, initialText: task.text });
   }
 
-  // function editTask(index: number) {
-  //   const taskToEdit = tasks[index];
-  //   setEditIndex(index);
-  //   setEditText(taskToEdit.text);
-  // }
-
-  function saveEdit() {
-    if (!editTaskId) return;
-
-    const cleanText = editText.trim();
+  function saveEdit(taskId: string, text: string) {
+    const cleanText = text.trim();
     if (!cleanText) return;
 
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === editTaskId ? { ...task, text: cleanText } : task,
+        task.id === taskId ? { ...task, text: cleanText } : task,
       ),
     );
 
-    setShowModal(false);
-    setIsEdit(false);
-    setEditTaskId(null);
-    setEditText("");
+    closeModal();
   }
 
-  function shoDeleteModal(id: string) {
-    setShowModal(true);
-    setDeleteId(id);
+  function showDeleteModal(taskId: string) {
+    setActiveModal({ type: "delete", taskId });
   }
 
-  function confirmDelete(id: string) {
-    setTasks(tasks.filter((task) => task.id !== id));
+  function confirmDelete(taskId: string) {
+    setTasks((prev) => prev.filter((task) => task.id !== taskId));
     closeModal();
   }
 
   function closeModal() {
-    setShowModal(false);
-    setIsEdit(false);
+    setActiveModal(null);
   }
 
   function saveToLocalStorage(tasks: Todo[]) {
@@ -135,7 +118,7 @@ export default function App() {
       todo={todo}
       onToggle={toggleChecked}
       onEdit={openEditModal}
-      onDelete={shoDeleteModal}
+      onDelete={showDeleteModal}
     />
   ));
 
@@ -167,14 +150,17 @@ export default function App() {
         </div>
         <Footer />
       </div>
-      {showModal && (
-        <Modal
-          isEdit={isEdit}
-          editText={editText}
-          setEditText={setEditText}
-          onSave={saveEdit}
-          deleteId={deleteId}
-          onConfirm={confirmDelete}
+      {activeModal?.type === "edit" && (
+        <EditModal
+          key={activeModal.taskId}
+          initialText={activeModal.initialText}
+          onSave={(text) => saveEdit(activeModal.taskId, text)}
+          onCancel={closeModal}
+        />
+      )}
+      {activeModal?.type === "delete" && (
+        <DeleteModal
+          onConfirm={() => confirmDelete(activeModal.taskId)}
           onCancel={closeModal}
         />
       )}
