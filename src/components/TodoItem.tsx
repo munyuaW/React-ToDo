@@ -15,11 +15,15 @@ function TodoItem(props: TodoItemProps) {
         {props.todo.text}
       </span>
       <button
+        type="button"
+        aria-label={`Edit task: ${props.todo.text}`}
         onClick={() => props.onEdit(props.todo.id)}
         className="p-1 rounded-sm cursor-pointer -mr-2">
         <FaRegEdit className="size-4 text-emerald-400" />
       </button>
       <button
+        type="button"
+        aria-label={`Delete task: ${props.todo.text}`}
         onClick={() => props.onDelete(props.todo.id)}
         className="p-1 rounded-sm cursor-pointer -mr-2">
         <FaTrashAlt className="size-4 text-orange-700" />
