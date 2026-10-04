@@ -1,10 +1,10 @@
+type TodoAction = (id: string) => void;
+
 export interface Todo {
   id: string;
   text: string;
   completed: boolean;
 }
-
-type TodoAction = (id: string) => void;
 
 export interface TodoItemProps {
   todo: Todo;
@@ -29,3 +29,8 @@ export interface DeleteModalProps {
   onConfirm: () => void;
   onCancel: () => void;
 }
+
+export type ActiveModal =
+  | { type: "edit"; taskId: string; initialText: string }
+  | { type: "delete"; taskId: string }
+  | null;
