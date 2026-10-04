@@ -1,29 +1,25 @@
 import { useState, useEffect } from "react";
 import { MdStorage } from "react-icons/md";
 
-import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Stats from "./components/Stats";
 import TaskInputForm from "./components/TaskInputForm";
 import TodoItem from "./components/TodoItem";
-// import { defaultTasks } from "./data";
-import type { Todo } from "./types";
-import DeleteModal from "./components/DeleteModal";
 import EditModal from "./components/EditModal";
+import DeleteModal from "./components/DeleteModal";
+import Footer from "./components/Footer";
 
-type ActiveModal =
-  | { type: "edit"; taskId: string; initialText: string }
-  | { type: "delete"; taskId: string }
-  | null;
+import type { Todo } from "./types";
+import type { ActiveModal } from "./types";
 
 export default function App() {
   const [tasks, setTasks] = useState<Todo[]>(loadFromLocalStorage);
+  const [activeModal, setActiveModal] = useState<ActiveModal>(null);
+
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((task) => task.completed).length;
   const percentComplete =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-
-  const [activeModal, setActiveModal] = useState<ActiveModal>(null);
 
   // Save to localStorage when tasks change
   useEffect(() => {
